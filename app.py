@@ -10,25 +10,17 @@ st.set_page_config(page_title="Jaffle Shop Dashboard", layout="wide")
 st.title("Jaffle Shop Sales Dashboard - 2019")
 
 
-# --- LOAD DATABASE VARIABLES ---
+# --- LOAD DATABASE CONNECTION URL ---
 try:
-    DB_USER = st.secrets.get("DB_USER")
-    DB_PASSWORD = st.secrets.get("DB_PASS")
-    DB_HOST = st.secrets.get("DB_HOST")
-    DB_PORT = st.secrets.get("DB_PORT", "5432")
-    DB_NAME = st.secrets.get("DB_NAME")
+    DB_URL= st.secrets.get("DB_URL")
 except st.errors.StreamlitSecretNotFoundError:
     # fallback to .env if no secrets.toml exists
     load_dotenv()
-    DB_USER = os.getenv("DB_USER")
-    DB_PASSWORD = os.getenv("DB_PASSWORD")
-    DB_HOST = os.getenv("DB_HOST")
-    DB_PORT = os.getenv("DB_PORT", "5432")
-    DB_NAME = os.getenv("DB_NAME")
+    DB_URL = os.getenv("DB_URL")
 
 # --- DATABASE CONNECTION ---
 engine = create_engine(
-    f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}",
+    DB_URL,
     connect_args={"sslmode": "require"}
 )
 
